@@ -1,15 +1,5 @@
-Table of Contents {#table-of-contents .TOCHeading}
-=================
-
-[Flow of project data 3](#_Toc24450280)
-
-[Adding a project to codewind 4](#adding-a-project-to-codewind)
-
-[Making a code change 5](#making-a-code-change)
-
-[Upgrading to 0.6.0 6](#upgrading-to-0.6.0)
-
-[]{#_Toc24450280 .anchor}Flow of project data.
+Flow of project data
+====================
 
 1.  Project starts on disk,
 
@@ -21,9 +11,7 @@ Table of Contents {#table-of-contents .TOCHeading}
 
 5.  where it then gets built and deployed in a container
 
-![A close up of a sign Description automatically
-generated](./media/image1.tiff){width="6.263888888888889in"
-height="2.6631944444444446in"}
+![Flow of data from IDE to codewind](./media/image1.png)
 
 Adding a project to codewind
 ============================
@@ -69,9 +57,7 @@ workspace running as a container
     codewind-workspace and then notifies Turbine that a new project is
     ready to build and run
 
-    ![A screenshot of a cell phone Description automatically
-    generated](./media/image2.tiff){width="6.384259623797026in"
-    height="2.172222222222222in"}
+    ![Internal flow of data](./media/image2.png)
 
 Making a code change
 ====================
@@ -108,9 +94,7 @@ detects a code change
     build is already in progress, the copy to build container will wait
     until the build finishes
 
-![A screenshot of a cell phone Description automatically
-generated](./media/image3.tiff){width="6.263888888888889in"
-height="4.795833333333333in"}
+![Data flow for delta change of source code](./media/image3.png)
 
 Upgrading to 0.6.0
 ==================
@@ -169,12 +153,10 @@ build and run it on a remote cloud. When running, the gatekeeper service
 will provide the ingress endpoint that will be used for all
 communication to pfe.
 
-![A screenshot of a cell phone Description automatically
-generated](./media/image4.tiff){width="6.263888888888889in"
-height="4.295833333333333in"}
+![Representation of components in and out of containers](./media/image4.png)
 
-Installing a remote code-pfe
-============================
+Installing a remote codewind-pfe
+================================
 
 Steps for user of cwctl
 
