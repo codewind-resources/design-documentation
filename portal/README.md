@@ -18,7 +18,7 @@ Adding a project to codewind
 
 For a project to be added (bind) to codewind, it must already exist
 either locally on disk or, in the case of fully hosted, in a volume
-associated with the
+associated with the IDE.
 
 Steps for user of cwctl
 
