@@ -46,7 +46,7 @@ codewind-pfe volume under `codewind-workspace/<projectname>`
 
 3. cwctl  makes one call per file  to `/api/v1/projects/:id/upload` for every file in the project
 
-4.` /api/v1/projects/:id/upload` receives each file and then writes it to
+4. `/api/v1/projects/:id/upload` receives each file and then writes it to
 `/codewind-workspace/cw-temp/<projectname>`
 
 5. cwctl calls `/api/v1/projects/:id/bind/end`when all files copied
