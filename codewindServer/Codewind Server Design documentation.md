@@ -14,7 +14,7 @@ A users project data typically flows in one direction when using Codewind.
 4. cwctl sends files to the codewind server
 5. where it then gets built and deployed in a container
 
-![](Codewind%20Server%20Design%20documentation/image1.png)
+![](media/image1.png)
 
 
 ## Design for adding a project to codewind 
@@ -53,7 +53,7 @@ codewind-pfe volume under `codewind-workspace/<projectname>`
 
 6. `/api/v1/projects/:id/bind/end` copies project from `codewind-workspace/cw-temp/<projectname>` to`codewind-workspace/<projectname>` and then notifies Turbine that a new project is ready to build and run
 
-![](Codewind%20Server%20Design%20documentation/image2.png)
+![](media/image2.png)
 
 
 ## How does a delta code change work
@@ -80,7 +80,7 @@ Each file that is uploaded is written to `/codewind-workspace/cw-temp/<projectna
 
 3. If a build is not in progress, changed files get copied to the build/run container created by turbine. A notification of changed files is also sent to turbine which will trigger a rebuild. If a build is already in progress, the copy to build container will wait until the build finishes
 
-![](Codewind%20Server%20Design%20documentation/image3.png)
+![](media/image3.png)
 
 ## Upgrading to 0.6.0
 For 0.6.0, the restriction  for having to have all user projects in a `codewind-workspace`has been removed.  This means that projects created before 0.6.0 will need to be upgraded to the latest version
