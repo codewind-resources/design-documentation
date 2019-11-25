@@ -7,5 +7,3 @@ will provide the ingress endpoint that will be used for all
 communication to pfe.
 
 ![](Security/image4.png)
-
-

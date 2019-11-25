@@ -17,7 +17,6 @@ A users project data typically flows in one direction when using Codewind.
 ![](Codewind%20Server%20Design%20documentation/image1.png)
 
 
-
 ## Design for adding a project to codewind 
 For a project to be added (bind) to codewind, it must already exist
 either locally on disk or, in the case of fully hosted, in a volume
@@ -101,7 +100,7 @@ files associated with a project
 2. For each project.inf found, cwctl will bind that project to codewind
 (see Adding a project to codewind)
 
-# User want to remove a project from codewind
+## User want to remove a project from codewind
 A user need to be able to remove a project from codewind if they no longer want to use it
 
 ###### Steps for user of cwctl
