@@ -6,7 +6,7 @@ Codewind now consists of several components each having their own binary.
 2. codewind-pfe
 3. codewind-performance
 4. codewind-keycloak
-5. codewind-gateway
+5. codewind-gatekeeper
 
 Each of these needs to correctly be able to report its version back to the user to help with debugging mis match of levels.
 
