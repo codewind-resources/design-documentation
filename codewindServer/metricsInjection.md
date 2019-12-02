@@ -27,5 +27,4 @@ metrics (pom.xml, package.json etc). If the injection is turned off, the
 files can be reverted to their original state from these copies. This
 check and injection happens each time code is synced to pfe
 
-![](./media/image1.png){width="6.263888888888889in"
-height="4.018055555555556in"}
+![](./media/metricsInjection.png)
