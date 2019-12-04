@@ -44,12 +44,12 @@ Example
 
 ### If versions don't match
 
-If cwctl detects that the version of itself is not at the same level as Codewind PFE, we should output a warning to the user and advise them to update.  This is critical as the cwctl may be attempting to invoke commands that are not available in old levels.
+If cwctl detects that the version of itself is not at the same level as Codewind PFE, cwctl will output a warning to the user and advise them to update.  This is critical as the cwctl may be attempting to invoke commands that are not available in old levels.
 
 ## Deploying Codewind with versions
 
-To make things simpler when deploying, cwctl can be passed an option release tag when installing.  This tag will specify the version of Codewind to install. If the tag is not supplied then the latest master images are installed.
+Cwctl can be passed an option release tag when installing.  This tag will specify the version of Codewind to install. If the tag is not supplied then the latest master images are installed.
 
 `cwctl install <-tag tagname>`
 
-We should prevent a back level version of cwctl installing a later version of Codewind as this would not be a supported environment.
+Cwctl prevents a back level version of cwctl installing a later version of Codewind as this would not be a supported environment.
