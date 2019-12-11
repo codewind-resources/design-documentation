@@ -22,7 +22,7 @@ where `global options` and `command` are:
 
 With the cli, you can
 
-Deploy a codewind server.
+Deploy a Codewind server.
 
 Set and persist credentials
 
@@ -30,11 +30,11 @@ Create projects
 
 Authenticate
 
-Start/stop codewind server
+Start/stop Codewind server
 
 Get the server status
 
-Remove a codewind server
+Remove a Codewind server
 
 Connection management
 
