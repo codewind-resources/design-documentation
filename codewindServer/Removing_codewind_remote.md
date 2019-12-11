@@ -2,12 +2,12 @@
 
 The Codewind cli has been design to do almost all the steps required to remove a remote Codewind deployment by chaining together a number of Kubernetes operations.
 
-There are two modes of use
+There are two modes of use:
 
 1. Remove Codewind
 2. Remove Keycloak
 
-Since a Keycloak service can provide authentication services to many Codewind deployments in different namespaces, removing Keycloak must only be performed when you are sure it is no longer used.
+Keycloak may provide authentication services to many Codewind deployments in different namespaces. Removing Keycloak should only be performed when you are sure it is no longer being used by Codewind or other applications.
 
 ###### Steps to remove Codewind only :
 
@@ -97,13 +97,13 @@ INFO[0001] Kubernetes namespace: CWCTL will not remove the namespace automatical
 
 Codewind and Keycloak deployments use labels to identify their components.
 
-To get a list of all Codewind deployments on a cluster use the standard commands `kubectl` (Kubernetes)  or `oc`(Openshift) with a label selector eg :
+To get a list of all running Codewind deployments on a cluster, use the standard commands `kubectl` (Kubernetes)  or `oc`(Openshift) with a label selector eg :
 
 ```
 kubectl get pods \
 --selector=app=codewind-pfe \
 --all-namespaces \
--o=jsonpath='{range .items[*]}{.status.startTime}{"\t"} {.metadata.labels.codewindWorkspace}{"\t"}{.metadata.namespace}{"\n"}{end}'
+-o=jsonpath='{range .items[*]}{.status.startTime}{"\t"} {.metadata.labels.codewindWorkspace}{"\t"}{.metadata.namespace}{"\n"} {end}'
 
 ```
 
