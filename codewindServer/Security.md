@@ -93,12 +93,7 @@ INFO[0000] Connection K3RETDJR added successfully
 
 Note:
 
-* --insecure is used to turn off certificate checking
-* --url should point to the GATEKEEPER URL not the KEYCLOAK URL 
+* --insecure is used to turn OFF certificate checking
+* --url should point to the GATEKEEPER URL not the KEYCLOAK URL
 * --label is an identifying label that the IDEs will use to sort the connection list
 * --username is username of the person (registered in keycloak) which will be using this connection
-
-
-
-
-
