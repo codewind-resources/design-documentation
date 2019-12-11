@@ -2,9 +2,11 @@
 
 [cwctl](/cwctl/codewind-cli.md)
 
-[Main design of codewind server](/codewindServer/Codewind&#32;Server&#32;Design&#32;documentation.md)
+[Main design of Codewind server](/codewindServer/Codewind&#32;Server&#32;Design&#32;documentation.md)
 
-[Deploying codewind](/codewindServer/Deploying&#32;codewind.md)
+[Deploying Codewind](/codewindServer/Deploying&#32;codewind.md)
+
+[Removing Codewind](/codewindServer/Removing_codewind_remote.md)
 
 [Injecting metrics](/codewindServer/metricsInjection.md)
 
