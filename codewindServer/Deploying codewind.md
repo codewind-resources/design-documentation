@@ -1,5 +1,7 @@
 # Deploying Codewind
 
+Before a remote deployment of Codewind can begin, login to your cluster using for example `oc login`. The account used needs to be an adminstrator account with ability to create service accounts, cluster roles, routes/ingress, PV claims, pods, deployments and secrets. 
+
 ## Installing a remote codewind-pfe with Keycloak
 
 ###### Steps for user of cwctl
