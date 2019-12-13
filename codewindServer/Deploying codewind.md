@@ -8,14 +8,14 @@ Before a remote deployment of Codewind can begin, login to your cluster using fo
 
 cwctl command to Install Codewind on a remote cloud cluster.
 
-`cwctl --insecure install remote \
+````cwctl --insecure install remote \
 —namespace {your_namespace} \
 --kadminuser admin \
 --kadminpass <keycloakPassword> \
 --krealm codewind \
 --kclient codewind \
 --kdevuser developer \
---kdevpass <userPassword>`
+--kdevpass <userPassword>```
 
 
 The cli has been design to do almost all the steps required to deploy codewind remotely by chaining together a number of Kubernetes api commands.
