@@ -1,14 +1,22 @@
 # Deploying Codewind
 
-Before a remote deployment of Codewind can begin, login to your cluster using for example `oc login`. The account used needs to be an adminstrator account with ability to create service accounts, cluster roles, routes/ingress, PV claims, pods, deployments and secrets. 
+Before a remote deployment of Codewind can begin, login to your cluster using for example `oc login`. The account used needs to be an 'adminstrator account' with ability to create service accounts, cluster roles, routes/ingress, PV claims, pods, deployments and secrets. This account is only required for deplying instances. Users of the Codewind remote instance will communicate directly and not require any special Kubernetes accounts.  Codewind users authenticate using the deployed Keycloak service. 
 
 ## Installing a remote codewind-pfe with Keycloak
 
 ###### Steps for user of cwctl
 
-cwctl called to Install Codewind on a remote cloud installation
+cwctl command to Install Codewind on a remote cloud cluster.
 
-`cwctl --insecure install remote  —namespace {your_namespace}  --kadminuser admin --kadminpass <keycloakPassword>  --krealm codewind --kclient codewind --kdevuser developer --kdevpass <userPassword>`
+`cwctl --insecure install remote \
+—namespace {your_namespace} \
+--kadminuser admin \
+--kadminpass <keycloakPassword> \
+--krealm codewind \
+--kclient codewind \
+--kdevuser developer \
+--kdevpass <userPassword>`
+
 
 The cli has been design to do almost all the steps required to deploy codewind remotely by chaining together a number of Kubernetes api commands.
 
