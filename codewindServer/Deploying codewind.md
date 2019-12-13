@@ -1,6 +1,6 @@
 # Deploying Codewind
 
-Before a remote deployment of Codewind can begin, login to your cluster using for example `oc login`. This Kubernetes/Openshift account needs to be an 'administrator account' with ability to create service accounts, cluster roles, routes/ingress, PV claims, pods, deployments and secrets. The account is only required for deploying and removing Codewind instances. Codewind users themselves do not require any special Kubernetes accounts and will communicate using their IDEs directly with Codewind services over HTTPs, with access control and authentication handled by the Codewind Keycloak service instead.
+Before a remote deployment of Codewind can begin, login to your cluster using for example `oc login`. This Kubernetes/Openshift account needs to be an 'administrator account' with ability to create service accounts, cluster roles, routes/ingress, PV claims, pods, deployments and secrets. The account is only required for deploying and removing Codewind instances. Codewind users themselves do not require any special Kubernetes accounts and will communicate using their IDEs directly with Codewind services over HTTPs. User based access control and authentication is handled by the Codewind Keycloak service.
 
 ## Installing a remote codewind-pfe with Keycloak
 
