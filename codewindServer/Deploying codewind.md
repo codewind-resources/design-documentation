@@ -8,7 +8,7 @@ Before a remote deployment of Codewind can begin, login to your cluster using fo
 
 cwctl command to Install Codewind on a remote cloud cluster.
 
-````cwctl --insecure install remote \
+```cwctl --insecure install remote \
 —namespace {your_namespace} \
 --kadminuser admin \
 --kadminpass <keycloakPassword> \
