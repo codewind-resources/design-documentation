@@ -187,7 +187,8 @@ cwctl --insecure install remote \
   --kclient codewind  \
   --kdevuser developer \
   --kdevpass passw0rd \
-  --ingress "apps.mycluster.X.X.X.X.nip.io" --kurl https://codewind-keycloak-k412oms7.apps.mycluster.X.X.X.X.nip.io
+  --ingress "apps.mycluster.X.X.X.X.nip.io" \
+  --kurl https://codewind-keycloak-k412oms7.apps.mycluster.X.X.X.X.nip.io
 
 
 
