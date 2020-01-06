@@ -131,8 +131,6 @@ cwctl --insecure install remote \
   --kadminpass passw0rd  \
   --krealm codewind \
   --kclient codewind  \
-  --kdevuser developer \
-  --kdevpass passw0rd \
   --ingress "apps.mycluster.X.X.X.X.nip.io" \
   --konly
 
