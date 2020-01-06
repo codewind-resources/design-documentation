@@ -2,6 +2,28 @@
 
 Before a remote deployment of Codewind can begin, login to your cluster using for example `oc login`. This Kubernetes/Openshift account needs to be an 'administrator account' with ability to create service accounts, cluster roles, routes/ingress, PV claims, pods, deployments and secrets. The account is only required for deploying and removing Codewind instances. Codewind users themselves do not require any special Kubernetes accounts and will communicate using their IDEs directly with Codewind services over HTTPs. User based access control and authentication is handled by the Codewind Keycloak service.
 
+## Kubernetes in Docker (MAC)
+It is possible to install a remote deployment of Codewind into Kubernetes running on Docker for MAC. This is useful when running a test or demo environment where you dont need all the services of a full Kubernetes cluster. 
+
+You'll need a few pieces and additional steps : 
+
+### Install nginx-ingress 
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/cloud-generic.yaml
+```
+
+### Map local address
+
+```bash
+export INGRESS_DOMAIN=$(kubectl get services --namespace ingress-nginx -o jsonpath='{.items[*].spec.clusterIP}')
+sudo ifconfig lo0 alias ${INGRESS_DOMAIN}
+```
+
+
+
+
 ## Installing a remote codewind-pfe with Keycloak
 
 ###### Steps for user of cwctl
