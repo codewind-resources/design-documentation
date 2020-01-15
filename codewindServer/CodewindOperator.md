@@ -27,11 +27,11 @@ Once installed, the Codewind-Operator runs in a pod on the cluster and can monit
 
 ## How it works
 
-Codewind-Operator monitors running instances and compares them against requested workload. By monitoring what has been requested compared to what is currently running on the cluster, the Codewind-Operator has an ability to provision new Codewinds or remove Codewinds or launch support pods like "Codewind-Performance" on demand.
+Codewind-Operator is built on the operator-sdk and monitors running instances comparing what is running against a requested workload. By monitoring what has been requested compared to what is currently running on the cluster, the Codewind-Operator has an ability to provision new Codewinds or remove Codewinds or launch support pods like "Codewind-Performance" on demand.
 
-To achieve this, the Codewind-Operator adds two new custom resources `Codewind` and `Keycloak`
+To achieve this, the Codewind-Operator adds two new custom resource definitions (CRD) for  `Codewind` and `Keycloak`
 
-By creating a custom resource in Kubernetes with a piece of yaml code such as:
+Deploying a Keycloak service is carried out with a piece of yaml code such as:
 
 ```
 apiVersion: codewind-operator.eclipse.org/v1alpha1
@@ -42,7 +42,7 @@ spec:
   size: 1
 ```
 
-This YAML request creation of a new `KIND` of resource called `Keycloak` with the name `devex`. Thats it, the Codewind-Operator sees the request for the new Keycloak customer resouce, begins downloading the Docker image, creates the PVC, secrets and deploys a new Keycloak POD.
+This YAML request creation of a new `Kind` of resource called `Keycloak` with the name `devex`. Thats it, the Codewind-Operator sees the request for the new Keycloak customer resouce, begins downloading the Docker image, creates the PVC, secrets and deploys a new Keycloak POD.
 
 Follow-up commands such as:
 
@@ -61,6 +61,9 @@ spec:
   auth: devex
 ```
 
+Deploying YAML like this will require authentication to the Kubernetes cluster.
+
+
 The command `kubectl get codewinds` should display the list of running Codewind deployments:
 
 ```
@@ -76,4 +79,20 @@ Running the command `kubectl get keycloaks` will show the Keycloak details`.
 NAME        AGE   URL
 devex       42m   https://codewind-keycloak-k18465r6.mycluster-757441.eu-gb.containers.mydomain.cloud
 ```
+
+## Requesting a Codewind deployment without a Kube context
+
+A Codewind user may not have access to use `oc` or `kubectl` commands against the cluster and would not be able to talk to the Codewind-Operator via the Kube API as shown above.
+
+Instead, assuming the operator has already been installed and a user account created in Keycloak, the new user can request the operator generate a new Codewind remote instance.
+
+This action is then handled by the operator where it carries out the exact same steps to deploy the Codewind instance and configure the Keycloak service with required access roles to the new containers. This is carried out using the service account of the operator rather than a login account.
+
+Once the Codewind service has been deployed, the URL of the instance is displayed ready for the user to copy into their IDE when creating a new connection.
+
+## Where to find the Codewind-Operator
+
+Ideally, the operator should be easy to find, eg on the application catalog of Openshift:
+
+![](media/operator/openshift-catalog.png)
 
