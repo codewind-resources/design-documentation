@@ -80,6 +80,22 @@ NAME        AGE   URL
 devex       42m   https://codewind-keycloak-k18465r6.mycluster-757441.eu-gb.containers.mydomain.cloud
 ```
 
+Deleting instances:
+```
+$ kubectl delete codewinds testuser3 testuser2
+codewind.eclipse.org "testuser3" deleted
+codewind.eclipse.org "testuser2" deleted
+```
+
+Operator logs :
+```
+{"level":"info","ts":1579097561.492997,"logger":"controller_codewind","msg":"Reconciling Codewind","Request.Namespace":"default","Request.Name":"testuser3"}
+{"level":"info","ts":1579097561.5555182,"logger":"controller_codewind","msg":"Reconciling Codewind","Request.Namespace":"default","Request.Name":"testuser2"}
+```
+
+
+
+
 ## Requesting a Codewind deployment without a Kube context
 
 A Codewind user may not have access to use `oc` or `kubectl` commands against the cluster and would not be able to talk to the Codewind-Operator via the Kube API as shown above.
@@ -92,7 +108,7 @@ Once the Codewind service has been deployed, the URL of the instance is displaye
 
 ## Where to find the Codewind-Operator
 
-Ideally, the operator should be easy to find, eg on the application catalog of Openshift:
+Ideally, the operator should be easy to find, for example on the application catalog of Openshift:
 
 ![](media/operator/openshift-catalog.png)
 
