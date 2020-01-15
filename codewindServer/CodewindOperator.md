@@ -108,7 +108,7 @@ Once the Codewind service has been deployed, the URL of the instance is displaye
 
 ## Where to find the Codewind-Operator
 
-Ideally, the operator should be easy to find, for example on the application catalog of Openshift:
+Ideally, the operator should be easy to find, for example on Operator hub or on the application catalog of Openshift:
 
 ![](media/operator/openshift-catalog.png)
 
