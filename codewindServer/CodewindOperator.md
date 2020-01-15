@@ -17,7 +17,7 @@ Over time administration could gets unmanageble, the administrator carries the b
 ![](media/operator/cwctl-diagram3.png)
 
 
-With the Codewind-Operator, this piece of software handles the deployment and management of new PFE, Gatekeeper, Keycloak and Performance containers on behalf of a user. It has knowledge of all the Kubernetes resources that are part of a typical Codewind remote deployment, configures them and deploy the components on demand.
+With the Codewind-Operator, this service handles the deployment and management of new PFE, Gatekeeper, Keycloak and Performance containers on behalf of a user. It has knowledge of all the Kubernetes resources that are part of a typical Codewind remote deployment, configures them and deploy each of the components on demand.
 
 Deployment of the Codewind-Operator is performed using `oc` or `kubectl` with either a standard yaml or using Codewind CLI `cwctl`.  This step will require the human operator to have already logged into their Kubernetes or Openshift but that is only for the purpose of installing the operator.
 
@@ -31,7 +31,7 @@ Codewind-Operator is built on the operator-sdk and monitors running instances co
 
 To achieve this, the Codewind-Operator adds two new custom resource definitions (CRD) for  `Codewind` and `Keycloak`
 
-Deploying a Keycloak service is carried out with a piece of yaml code such as:
+Deploying a Keycloak service is carried out with a small piece of yaml code such as:
 
 ```
 apiVersion: codewind-operator.eclipse.org/v1alpha1
@@ -42,7 +42,7 @@ spec:
   size: 1
 ```
 
-This YAML request creation of a new `Kind` of resource called `Keycloak` with the name `devex`. Thats it, the Codewind-Operator sees the request for the new Keycloak customer resouce, begins downloading the Docker image, creates the PVC, secrets and deploys a new Keycloak POD.
+This YAML requests creation of a new `Kind` of resource called `Keycloak` with the name `devex`. Thats it, the Codewind-Operator sees the request for the new Keycloak customer resouce, begins downloading the Docker image, creates the PVC, secrets and deploys a new Keycloak POD.
 
 Follow-up commands such as:
 
