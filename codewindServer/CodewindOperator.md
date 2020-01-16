@@ -27,11 +27,11 @@ Once installed, the Codewind-Operator runs in a pod on the cluster and can monit
 
 ## How it works
 
-Codewind-Operator is built on the operator-sdk and monitors running instances comparing what is running against a requested workload. By monitoring what has been requested compared to what is currently running on the cluster, the Codewind-Operator has an ability to provision new Codewinds or remove Codewinds or launch support pods like "Codewind-Performance" on demand.
+Codewind-Operator is built on the operator-sdk and monitors the state of the cluster. By monitoring what is currently running compared to what has been requested (eg set me up a new Codewind,  delete this specific Codewind), the Codewind-Operator has an ability to stand up new Codewinds or tear down running Codewinds or even launch support pods like "Codewind-Performance" on demand. With its knownledge of what makes up a Codewind instance it can remove PVC, Secrets and other supporting components. 
 
-To achieve this, the Codewind-Operator adds two new custom resource definitions (CRD) for  `Codewind` and `Keycloak`
+To achieve this, the Codewind-Operator adds two new custom resource definitions (CRD) for `Codewind` and `Keycloak`
 
-Deploying a Keycloak service is carried out with a small piece of yaml code such as:
+Deploying a Keycloak service is carried out with a small piece of yaml code eg:
 
 ```
 apiVersion: codewind-operator.eclipse.org/v1alpha1
