@@ -8,9 +8,13 @@
 
 [Removing Codewind](/codewindServer/Removing_codewind_remote.md)
 
+[Codewind Operator](/codewindServer/CodewindOperator.md)
+
 [Injecting metrics](/codewindServer/metricsInjection.md)
 
 [Security](/codewindServer/Security.md)
+
+[Security - SocketIO Authentication](/codewindServer/SocketIOAuthentication.md)
 
 [Versioning](/codewindServer/Versioning.md)
 
