@@ -32,7 +32,7 @@ cwctl command to Install Codewind on a remote cloud cluster.
 
 ```
 cwctl --insecure install remote \
-—namespace {your_namespace} \
+-—namespace {your_namespace} \
 --kadminuser admin \
 --kadminpass <keycloakPassword> \
 --krealm codewind \
