@@ -47,10 +47,10 @@ local		    latest-20200130-164353	x.x.dev-20200130-164420
 
 > cwctl --json version
 {
-    "CwctlVersion": "0.6.0"
+    "cwctlVersion": "0.6.0"
     "PFEVersion": "0.6.0-20191203-132736"
-    "PerformanceVersion": "0.6.0-20191203-132736"
-    "GatekeeperVersion": "0.6.0-20191203-132736"
+    "performanceVersion": "0.6.0-20191203-132736"
+    "gatekeeperVersion": "0.6.0-20191203-132736"
 }
 ```
 
@@ -72,10 +72,10 @@ k60ngbw9	    x.x.dev-20200108-171055		x.x.dev-20200110-162816		x.x.dev-20200108-
 
 > cwctl --insecure --json version --conid XXXXXX
 {
-    "CwctlVersion": "x.x.x"
+    "cwctlVersion": "x.x.x"
     "PFEVersion": "x.x.x.imageBuildTime"
-    "PerformanceVersion": "x.x.x.imageBuildTime"
-    "GatekeeperVersion": "x.x.x.imageBuildTime"
+    "performanceVersion": "x.x.x.imageBuildTime"
+    "gatekeeperVersion": "x.x.x.imageBuildTime"
 }
 ```
 
