@@ -1,10 +1,10 @@
-# Codewind Server Design documentation
+# Codewind Server Design Documentation
 
 The Codewind server consists of two main elements. These are the API frontend (portal), and the build and run engine (turbine) .
 
 ## Flow of project data
 
-A users project data typically flows in one direction when using Codewind.
+A user's project data typically flows in one direction when using Codewind.
 
 1. Project starts on disk
 2. It's edited in an IDE
@@ -14,13 +14,13 @@ A users project data typically flows in one direction when using Codewind.
 
 ![diagram for the flow from project source code to build container](media/image1.png)
 
-## Design for adding a project to codewind
+## Adding a project to Codewind
 
 For a project to be added to Codewind (using cwctl bind), it must already exist either locally on disk or, in the case of fully-hosted, in a volume associated with the IDE.
 
 ### Steps for user of cwctl
 
-To download a project from a Template, and initialize it as a Codewind project (detecting its type and adding a `.cw-settings` file).
+To download a project from a template, and initialize it as a Codewind project (detecting its type and adding a `.cw-settings` file)
 
 ```shell
 cwctl project create -p <disk location to download project> -u <url of project template>
@@ -46,14 +46,14 @@ Response of Project ID and Status
 
 ### Internal flow
 
-All actions that require access to the local filesystem will done by cwctl rather than a bind mount back from the codewind-pfe container.
-This removes any issues with permissions and the need to have the local workspace running as a container
+All actions that require access to the local filesystem will be done by cwctl rather than a bind mount back from the Codewind PFE container.
+This removes any issues with permissions and the need to have the local workspace running as a container.
 
 1. cwctl calls `/api/v1/projects/bind/start` api on PFE
 
-2. `/api/v1/projects/bind/start` creates directory structure in codewind-pfe volume under `codewind-workspace/<projectname>`
+2. This API creates the project's directory structure in the Codewind PFE volume under `codewind-workspace/<projectname>`
 
-3. cwctl makes one call per file to `/api/v1/projects/:id/upload` for every file in the project
+3. cwctl makes one call per file to `/api/v1/projects/:id/upload` on Codewind PFE for every file in the project
 
 4. `/api/v1/projects/:id/upload` receives each file and then writes it to `/codewind-workspace/cw-temp/<projectname>`
 
@@ -63,14 +63,14 @@ This removes any issues with permissions and the need to have the local workspac
 
 ![diagram for the relationship between cwctl and Codewind-pfe](media/image2.png)
 
-## How does a delta code change work
+## How does a delta code change work?
 
 If a user makes a code change, upon saving that file, Codewind should automatically build and run the application with that code change
 
 The cli needs to be told when the local project is ready to be uploaded to the codewind-pfe container.
 For example, by the file watcher daemon when it detects a code change
 
-### Steps for user of cwctl
+### Steps for user of cwctl creating a project
 
 cwctl called to sync changed files to codewind-pfe container
 
@@ -78,7 +78,7 @@ cwctl called to sync changed files to codewind-pfe container
 cwctl project sync -p <absolute path to project> -i <projectID> -t <milliseconds since epoch of last sync call>
 ```
 
-### Internal flow
+### Internal flow when creating a project
 
 1. cwctl calls `/api/v1/projects/:id/upload` once for every file that has changed.
    The list of files is worked out by comparing the last modification time of each file in the project against the passed in '-t' parameter.
@@ -93,12 +93,12 @@ cwctl project sync -p <absolute path to project> -i <projectID> -t <milliseconds
 
 ![diagram for synchronizing a code change with the build container](media/image3.png)
 
-## Upgrading to 0.6.0
+## Upgrading to Codewind Version 0.6.0
 
-For 0.6.0, the restriction for having to have all user projects in a `codewind-workspace`has been removed.
-This means that projects created before 0.6.0 will need to be upgraded to the latest version
+For 0.6.0, the restriction for having to have all user projects in a `codewind-workspace` has been removed.
+This means that projects created before 0.6.0 will need to be upgraded to the latest version.
 
-### Steps for user of cwctl
+### Steps for user of cwctl syncing a project
 
 cwctl called to upgrade projects that were created in a previous release
 
@@ -106,10 +106,9 @@ cwctl called to upgrade projects that were created in a previous release
 cwctl upgrade --workspace <old codewind-workspace dir>
 ```
 
-### Internal flow
+### Internal flow when syncing a project
 
-1. cwctl will parse the passed in workspace looking for the project.inf
-   files associated with a project
+1. cwctl will parse the passed in workspace looking for the project.inf files associated with a project
 
 2. For each project.inf found, cwctl will bind that project to codewind
    (see Adding a project to codewind)
@@ -118,15 +117,15 @@ cwctl upgrade --workspace <old codewind-workspace dir>
 
 A user need to be able to remove a project from codewind if they no longer want to use it
 
-### Steps for user of cwctl
+### Steps for user of cwctl removing a project
 
 Currently, cwctl is not required to remove a project.
 
-### Steps for users of api
+### Steps for users of api removing a project
 
-`/api/v1/projects/:id/unbind` needs to be called.
+`/api/v1/projects/:id/unbind` needs to be called on Codewind PFE.
 
-### Internal flow
+### Internal flow when removing a project
 
 Projects are not actually deleted by codewind. The underlying source code will still exist in the workspace. The Codewind IDE plugins give the option to delete the local source code when deleting a project.
 
