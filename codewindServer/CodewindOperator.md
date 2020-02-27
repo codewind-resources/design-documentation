@@ -6,34 +6,33 @@ The Codewind-Operator is an evolution of Codewind remote deployment and attempts
 
 Previously setting up Codewind required logging into Kubernetes or Openshift and performing intricate steps to determine the cluster configuration before using the Codewind-CLI (cwctl).  The CWCTL command also had many subcommands and flags that were needed to install or remove Codewind or Keycloak.
 
-![](media/operator/cwctl-diagram1.png)
+![Single Codewind architecture without operators](media/operator/cwctl-diagram1.png)
 
 Things get complicated to administer when adding additional Codewinds for users especially when they need to share a common Keycloak. The administrator needed to know the connectivity details for Keycloak or discover them using either the Openshift console or run kubectl commands with selectors before deploying each new Codewind.
 
-![](media/operator/cwctl-diagram2.png)
+![Multiple Codewind architecture without operators](media/operator/cwctl-diagram2.png)
 
-Over time administration could gets unmanageble, the administrator carries the burden of deploying new Codewinds for users, connecting them up to Keycloak and providing the user with connectivity details. 
+Over time administration could get unmanageable, the administrator carries the burden of deploying new Codewinds for users, connecting them up to Keycloak and providing the user with connectivity details.
 
-![](media/operator/cwctl-diagram3.png)
+![Unmanageable number of Codewinds](media/operator/cwctl-diagram3.png)
 
+With the Codewind-Operator, this service handles the deployment and management of new PFE, Gatekeeper, Keycloak and Performance containers on behalf of a user. It has knowledge of all the Kubernetes resources that are part of a typical Codewind remote deployment, configures them and deploys each of the components on demand.
 
-With the Codewind-Operator, this service handles the deployment and management of new PFE, Gatekeeper, Keycloak and Performance containers on behalf of a user. It has knowledge of all the Kubernetes resources that are part of a typical Codewind remote deployment, configures them and deploy each of the components on demand.
+Deployment of the Codewind-Operator is performed using `oc` or `kubectl` with either a standard yaml or using Codewind CLI `cwctl`.  This step will require the human operator to have already logged into their Kubernetes or Openshift, but that is only for the purpose of installing the operator.
 
-Deployment of the Codewind-Operator is performed using `oc` or `kubectl` with either a standard yaml or using Codewind CLI `cwctl`.  This step will require the human operator to have already logged into their Kubernetes or Openshift but that is only for the purpose of installing the operator.
+![Codewind operator architecture](media/operator/cwctl-diagram4.png)
 
-![](media/operator/cwctl-diagram4.png)
-
-Once installed, the Codewind-Operator runs in a pod on the cluster and can monitor the entire cluster or just a single namespace. The Codewind-Operator has the ability to deploy all the necessary Kubernetes resources to support Codewind including Pods, Secrets, PVC, Roles and Role Bindings and it can configure all of them including adding any security Realms, User Accounts (if they dont already exist), Access Roles, and exchange of any public keys.
+Once installed, the Codewind-Operator runs in a pod on the cluster and can monitor the entire cluster or just a single namespace. The Codewind-Operator has the ability to deploy all the necessary Kubernetes resources to support Codewind including Pods, Secrets, PVC, Roles and Role Bindings and it can configure all of them including adding any security Realms, User Accounts (if they don't already exist), Access Roles, and  handling the exchange of any public keys.
 
 ## How it works
 
-Codewind-Operator is built on the operator-sdk and monitors the state of the cluster. By monitoring what is currently running compared to what has been requested (eg set me up a new Codewind,  delete this specific Codewind), the Codewind-Operator has an ability to stand up new Codewinds or tear down running Codewinds or even launch support pods like "Codewind-Performance" on demand. With its knownledge of what makes up a Codewind instance it can remove PVC, Secrets and other supporting components. 
+The Codewind-Operator is built on the operator-sdk and monitors the state of the cluster. By monitoring what is currently running compared to what has been requested (e.g set me up a new Codewind, delete this specific Codewind), the Codewind-Operator has an ability to stand up new Codewinds or tear down running Codewinds or even launch support pods like "Codewind-Performance" on demand. With its knowledge of what makes up a Codewind instance it can remove PVC, secrets and other supporting components.
 
-To achieve this, the Codewind-Operator adds two new custom resource definitions (CRD) for `Codewind` and `Keycloak`
+To achieve this, the Codewind-Operator adds two new custom resource definitions (CRD) for `Codewind` and `Keycloak`.
 
-Deploying a Keycloak service is carried out with a small piece of yaml code eg:
+Deploying a Keycloak service is carried out with a small piece of yaml code e.g:
 
-```
+```YAML
 apiVersion: codewind-operator.eclipse.org/v1alpha1
 kind: Keycloak
 metadata:
@@ -42,7 +41,7 @@ spec:
   size: 1
 ```
 
-This YAML requests creation of a new `Kind` of resource called `Keycloak` with the name `devex`. Thats it, the Codewind-Operator sees the request for the new Keycloak customer resouce, begins downloading the Docker image, creates the PVC, secrets and deploys a new Keycloak POD.
+This YAML requests creation of a new `Kind` of resource called `Keycloak` with the name `devex`. Thats it, the Codewind-Operator sees the request for the new Keycloak customer resource, begins downloading the Docker image, creates the PVC, secrets and deploys a new Keycloak pod.
 
 Follow-up commands such as:
 
@@ -52,7 +51,7 @@ Follow-up commands such as:
 
 Similar to deploying a Keycloak service, deploying Codewind follows the same pattern:
 
-```
+```YAML
 apiVersion: codewind-operator.eclipse.org/v1alpha1
 kind: Codewind
 metadata:
@@ -73,28 +72,27 @@ testuser2   22m   devex   https://codewind-k5856a25.mycluster-757441.eu-gb.conta
 testuser3   7s    devex   https://codewind-k18364r5.mycluster-757441.eu-gb.containers.mydomain.cloud
 ```
 
-Running the command `kubectl get keycloaks` will show the Keycloak details`.
+Running the command `kubectl get keycloaks` will show the details of the Keycloaks.
 
-```
+```console
 NAME        AGE   URL
 devex       42m   https://codewind-keycloak-k18465r6.mycluster-757441.eu-gb.containers.mydomain.cloud
 ```
 
 Deleting instances:
-```
+
+```console
 $ kubectl delete codewinds testuser3 testuser2
 codewind.eclipse.org "testuser3" deleted
 codewind.eclipse.org "testuser2" deleted
 ```
 
 Operator logs :
-```
+
+```console
 {"level":"info","ts":1579097561.492997,"logger":"controller_codewind","msg":"Reconciling Codewind","Request.Namespace":"default","Request.Name":"testuser3"}
 {"level":"info","ts":1579097561.5555182,"logger":"controller_codewind","msg":"Reconciling Codewind","Request.Namespace":"default","Request.Name":"testuser2"}
 ```
-
-
-
 
 ## Requesting a Codewind deployment without a Kube context
 
@@ -110,5 +108,4 @@ Once the Codewind service has been deployed, the URL of the instance is displaye
 
 Ideally, the operator should be easy to find, for example on Operator hub or on the application catalog of Openshift:
 
-![](media/operator/openshift-catalog.png)
-
+![Openshift Application Catalogue](media/operator/openshift-catalog.png)
