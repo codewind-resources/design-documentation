@@ -110,8 +110,8 @@ cwctl project link get
 cwctl project link create
     --id value,         -i value    the project id
     --conid value                   the connection id
-    --linkID value,     -t value    the project id of the project to add a link to
-    --linkConID value               the connection id of the project to add a link to
+    --targetID value,     -t value    the project id of the project to add a link to
+    --targetConID value               the connection id of the project to add a link to
     --env value         -e value    the name of the environment variable to use
     --url value         -u value    the url of the project to add a link to
 ```
@@ -120,8 +120,8 @@ cwctl project link create
 cwctl project link update
     --id value,         -i value    the project id
     --conid value                   the connection id
-    --linkID value,     -t value    the project id of the project to update a link to
-    --linkConID value               the connection id of the project to update a link to
+    --targetID value,     -t value    the project id of the project to update a link to
+    --targetConID value               the connection id of the project to update a link to
     --env value         -e value    the name of the environment variable to use
     --url value         -u value    the url of the project to update a link to
 ```
@@ -130,6 +130,6 @@ cwctl project link update
 cwctl project link delete
     --id value,         -i value    the project id
     --conid value                   the connection id
-    --linkID value,     -t value    the project id of the linked project to delete
-    --linkConID value               the connection id of the linked project to delete
+    --targetID value,     -t value    the project id of the linked project to delete
+    --targetConID value               the connection id of the linked project to delete
 ```
