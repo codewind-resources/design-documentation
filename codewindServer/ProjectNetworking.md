@@ -3,7 +3,15 @@
 ## Design decisions/assumptions
 * Environment variables will be used to connect projects
 * The URL of a project will never change (See issue #1) - for initial implementation
-* 
+* The user will always specify a name for the enrvironment variable - for initial implementation but could be random later
+* The users container/pod will restart when a link is created/updated
+    * Either kicking of another build (which should complete quickly due to Docker caching) or implementing a restart and pickup env function
+* envs will be added to the containers in different ways depending on the build tool/architecture
+    * Local Docker through Codewind: env file
+    * K8s through Codewind (Helm): configmap
+    * Appsody local: env file (--docker-options)
+    * Appsody K8s: env file or configmap (tbd)
+    * odo K8s: tbd
 
 ### Issues that need to be addressed/fixed
 1. In Remote the Ingress address for the Codewind templates changes on a project change
