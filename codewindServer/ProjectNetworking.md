@@ -18,25 +18,34 @@
 ### Issues that need to be addressed/fixed
 1. In Remote the Ingress address for the Codewind templates changes on a project change
 
+### Implementation notes:
+* A project is type "LOCAL" if the POST request does not contain a parentPFEURL AND the target projectID is exists on the same PFE.
+* A project type is "REMOTE" if a parentPFEURL is given, PFE cannot know whether the given URL is pointing to a Codewind application.
+
 ## PFE
 ### Project links object
 ```javascript
 project: {
     id: xxxxx-xxxx-xxxx-xxxxx,
     name: javaApp,
-    links: [
-        {
-            id: "connectionID/projectID", // See GET request for more information
-            projectId: "xxxxx-xxxx-xxxx-xxxxx",
-            projectName: "javaApp",
-            env: "JAVA_APP_URL",
-            url: "urlToProject.com",
-            connectionID: "K60NGBW9",
-            connectionURL: "https://codewind-gatekeeper-k56r8d8f.apps.exact-mongrel-icp-mst.9.20.195.90.nip.io"
-        },
-        {   ...connectedProject2    },
-        {   ...connectedProject3    },
-    ]
+    links: {
+        filePath: "connectionFileLocation.env",
+        _links: [
+            {
+                projectId: "xxxxx-xxxx-xxxx-xxxxx",
+                projectURL: "internalURL", // Such as Docker network address
+                envName: "JAVA_APP_URL",
+                type: "LOCAL",
+            },
+            {
+                projectId: "xxxxx-xxxx-xxxx-xxxxx",
+                projectURL: "externalURL", // Such as Ingress address
+                envName: "JAVA_APP_URL",
+                parentPFEURL: "https://codewind-gatekeeper-k56r8d8f.apps.exact-mongrel-icp-mst.9.20.195.90.nip.io",
+                type: "REMOTE",
+            }
+        ]
+    }
 }
 ```
 
@@ -44,7 +53,7 @@ project: {
 Base url: `/api/v1/links`
 
 ```json
-GET /api/v1/links // Gets all the linked projects
+GET /api/v1/links
 BODY null
 
 RES
@@ -52,29 +61,48 @@ RES
     : BODY {
         "connectedProjects": [
             {
-                "id": "connectionID/projectID", // e.g. K60NGBW9/xxxxx-xxxx-xxxx-xxxxx in this form as a projectID is only unique per connection
                 "projectId": "xxxxx-xxxx-xxxx-xxxxx",
-                "projectName": "javaApp",
-                "env": "JAVA_APP_URL", // The env that will be put in the container
-                "url": "urlToProject.com", // The value for the env
-                "connectionID": "K60NGBW9",
-                "connectionURL": "https://codewind-gatekeeper-k56r8d8f.apps.exact-mongrel-icp-mst.9.20.195.90.nip.io"
+                "projectURL": "internalURL",
+                "envName": "JAVA_APP_URL",
+                "type": "LOCAL",
             },
-            {   ...connectedProject2    },
-            {   ...connectedProject3    },
+            {
+                "projectId": "xxxxx-xxxx-xxxx-xxxxx",
+                "projectURL": "externalURL",
+                "envName": "JAVA_APP_URL",
+                "parentPFEURL": "https://codewind-gatekeeper-k56r8d8f.apps.exact-mongrel-icp-mst.9.20.195.90.nip.io",
+                "type": "REMOTE",
+            }
         ]
     }
 ```
 
 ```json
-POST /api/v1/links // Adds a link
+POST /api/v1/links
+
+LOCAL : Don't send a parentPFEURL
 BODY {
     "projectId": "xxxxx-xxxx-xxxx-xxxxx",
-    "projectName": "javaApp",
-    "env": "JAVA_APP_URL", // The env that will be put in the container
-    "url": "appbaseURL or host+port (aka what we use to talk to performance)", // The value for the env
-    "connectionID": "K60NGBW9",
-    "connectionURL": "https://codewind-gatekeeper-k56r8d8f.apps.exact-mongrel-icp-mst.9.20.195.90.nip.io"
+    "projectURL": "internalURL",
+    "envName": "JAVA_APP_URL",
+    "type": "LOCAL",
+}
+
+RES
+202 : Added successfully
+    : BODY null
+
+40x : Target Project ID does not exist on the same PFE
+    : BODY null
+
+
+REMOTE :
+BODY {
+    "projectId": "xxxxx-xxxx-xxxx-xxxxx",
+    "projectURL": "externalURL",
+    "envName": "JAVA_APP_URL",
+    "parentPFEURL": "https://codewind-gatekeeper-k56r8d8f.apps.exact-mongrel-icp-mst.9.20.195.90.nip.io",
+    "type": "REMOTE",
 }
 
 RES
@@ -83,10 +111,10 @@ RES
 ```
 
 ```json
-PUT /api/v1/links/:id // Updates the env and value of a link
+PUT /api/v1/links/:env
 BODY {
-    "env": "JAVA_APP_URL", // The env that will be put in the container
-    "url": "appbaseURL or host+port (aka what we use to talk to performance)", // The value for the env
+    "env": "JAVA_APP_URL",
+    "url": "appbaseURL or host+port (aka what we use to talk to performance)",
 }
 
 RES
@@ -95,7 +123,7 @@ RES
 ```
 
 ```json
-DELETE /api/v1/links/:id // Deletes a link
+DELETE /api/v1/links/:env
 BODY null
 
 RES
