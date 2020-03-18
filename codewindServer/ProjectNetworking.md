@@ -19,7 +19,7 @@
 1. In Remote the Ingress address for the Codewind templates changes on a project change
 
 ### Implementation notes:
-* A project is type "LOCAL" if the POST request does not contain a parentPFEURL AND the target projectID is exists on the same PFE.
+* A project is type "LOCAL" if the POST request does not contain a parentPFEURL + projectURL AND the target projectID is exists on the same PFE.
 * A project type is "REMOTE" if a parentPFEURL is given, PFE cannot know whether the given URL is pointing to a Codewind application.
 
 ## PFE
@@ -80,10 +80,9 @@ RES
 ```json
 POST /api/v1/links
 
-LOCAL : Don't send a parentPFEURL
+LOCAL : Don't send a parentPFEURL or projectURL
 BODY {
     "projectId": "xxxxx-xxxx-xxxx-xxxxx",
-    "projectURL": "internalURL",
     "envName": "JAVA_APP_URL",
     "type": "LOCAL",
 }
@@ -140,34 +139,37 @@ cwctl project link
 
 ```bash
 cwctl project link get
-    --id value,         -i value    the project id
-    --conid value                   the connection id
+    --id value,             -i value    the project id
+    --conid value                       the connection id
 ```
 
 ```bash
 cwctl project link create
-    --id value,         -i value    the project id
-    --conid value                   the connection id
-    --targetID value,     -t value    the project id of the project to add a link to
-    --targetConID value               the connection id of the project to add a link to
-    --env value         -e value    the name of the environment variable to use
-    --url value         -u value    the url of the project to add a link to
+    --id value,             -i value    the project id
+    --conid value                       the connection id
+    --targetID value,       -t value    the project id of the project to add a link to
+    --targetConID value                 the connection id of the project to add a link to (If not given, targetConID is the same as conid)
+    --env value             -e value    the name of the environment variable to use
 ```
 
 ```bash
-cwctl project link update
+cwctl project link rename
     --id value,         -i value    the project id
     --conid value                   the connection id
-    --targetID value,     -t value    the project id of the project to update a link to
-    --targetConID value               the connection id of the project to update a link to
     --env value         -e value    the name of the environment variable to use
-    --url value         -u value    the url of the project to update a link to
+    --newEnv value                  the new name for the environment variable
+```
+
+```bash
+cwctl project link refresh
+    --id value,         -i value    the project id
+    --conid value                   the connection id
+    --env value         -e value    the name of the environment variable to refresh the url for
 ```
 
 ```bash
 cwctl project link delete
     --id value,         -i value    the project id
     --conid value                   the connection id
-    --targetID value,     -t value    the project id of the linked project to delete
-    --targetConID value               the connection id of the linked project to delete
+    --env value         -e value    the name of the environment variable to delete
 ```
