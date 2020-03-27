@@ -102,6 +102,11 @@ The watchlist body will look like this:
             "*.class"
          ], 
 	       "projectWatchStateId" : "[...]",
+         "projectCreationTime" : 0,
+         "refPaths" : [{
+            "from" : "absolute path",
+            "to" : "project relative path"
+         }],
       },
    ]
 }
@@ -127,6 +132,12 @@ The `ignoredPaths` are *relative paths* from the project's root dir, with `/` as
   - a `*src*.java` filter would NOT filter it out, because src is part of the path and not the filename.
   - a `com` filter WOULD filter it out, because `com` would match on the filename of a parent directory in the file path (/src/**com**/jgw/MyClass.java).
 
+`refPaths`:
+- The `refPaths` field was added [as part of this feature](https://github.com/eclipse/codewind/issues/1399), which allows the user to synchronize custom files from outside the container (and outside the project root) into the container at specified point.
+
+`projectCreationTime`:
+- The `projectCreationTime` field was added to help fix [these](https://github.com/eclipse/codewind/issues/1039) [bugs](https://github.com/eclipse/codewind/issues/1471). If this value is non-zero when the filewatcher first received this field, it will pass this value as the timestamp to cwctl. See description on 1471 for more details.
+
 `projectWatchState`:
 - See description in dedicated section below.
 
@@ -143,6 +154,8 @@ After startup, filewatchers should establish a long-running WebSocket connection
       "ignoredPaths": "[ ... ]",
       "ignoredFilenames": "[ ... ]",
       "projectWatchStateId" : "[...]",
+      "projectCreationTime" : 0,
+      "refPaths" : [{ "[...]" }],
     },
     {
       "changeType" : "delete", 
