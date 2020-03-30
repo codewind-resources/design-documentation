@@ -4,7 +4,7 @@
 
 ## Design decisions/assumptions
 * Environment variables will be used to connect projects
-* The URL of a project will never change (See issue #1) - for initial implementation
+* ~~The URL of a project will never change (See issue #1) - for initial implementation~~ Use of link proxy voids this
 * The user will always specify a name for the enrvironment variable - for initial implementation but could be random later
 * The users container/pod will restart when a link is created/updated
     * Either kicking of another build (which should complete quickly due to Docker caching) or implementing a restart and pickup env function
@@ -14,13 +14,12 @@
     * Appsody local: env file (--docker-options)
     * Appsody K8s: env file or configmap (tbd)
     * odo K8s: tbd
+* The URLs put into containers will point back to a proxy running in PFE so that PFE can direct the request to the application's current URL
+    * For example `NEW_URL=http://codewind-pfe:9090/links/proxy/:idOfProjectToLinkTo`
 
 ### Issues that need to be addressed/fixed
-1. In Remote the Ingress address for the Codewind templates changes on a project change
-
-### Implementation notes:
-* A project is type "LOCAL" if the POST request does not contain a parentPFEURL + projectURL AND the target projectID is exists on the same PFE.
-* A project type is "REMOTE" if a parentPFEURL is given, PFE cannot know whether the given URL is pointing to a Codewind application.
+1. ~~In Remote the Ingress address for the Codewind templates changes on a project change~~
+2. PFEs need to be able to share ProjectLists (at least the external URLs of projects)
 
 ## PFE
 ### Project links object
@@ -33,17 +32,9 @@ project: {
         _links: [
             {
                 projectId: "xxxxx-xxxx-xxxx-xxxxx",
-                projectURL: "internalURL", // Such as Docker network address
+                projectURL: "http://codewind-pfe/links/proxy/xxxxx-xxxx-xxxx-xxxxx", // URL pointing back to the PFE link proxy with application id
                 envName: "JAVA_APP_URL",
-                type: "LOCAL",
             },
-            {
-                projectId: "xxxxx-xxxx-xxxx-xxxxx",
-                projectURL: "externalURL", // Such as Ingress address
-                envName: "JAVA_APP_URL",
-                parentPFEURL: "https://codewind-gatekeeper-k56r8d8f.apps.exact-mongrel-icp-mst.9.20.195.90.nip.io",
-                type: "REMOTE",
-            }
         ]
     }
 }
@@ -64,15 +55,7 @@ RES
                 "projectId": "xxxxx-xxxx-xxxx-xxxxx",
                 "projectURL": "internalURL",
                 "envName": "JAVA_APP_URL",
-                "type": "LOCAL",
             },
-            {
-                "projectId": "xxxxx-xxxx-xxxx-xxxxx",
-                "projectURL": "externalURL",
-                "envName": "JAVA_APP_URL",
-                "parentPFEURL": "https://codewind-gatekeeper-k56r8d8f.apps.exact-mongrel-icp-mst.9.20.195.90.nip.io",
-                "type": "REMOTE",
-            }
         ]
     }
 ```
@@ -82,9 +65,8 @@ POST /api/v1/links
 
 LOCAL : Don't send a parentPFEURL or projectURL
 BODY {
-    "projectId": "xxxxx-xxxx-xxxx-xxxxx",
-    "envName": "JAVA_APP_URL",
-    "type": "LOCAL",
+    "targetProjectID": "xxxxx-xxxx-xxxx-xxxxx",
+    "envName": "JAVA_APP_URL"
 }
 
 RES
@@ -93,27 +75,13 @@ RES
 
 40x : Target Project ID does not exist on the same PFE
     : BODY null
-
-
-REMOTE :
-BODY {
-    "projectId": "xxxxx-xxxx-xxxx-xxxxx",
-    "projectURL": "externalURL",
-    "envName": "JAVA_APP_URL",
-    "parentPFEURL": "https://codewind-gatekeeper-k56r8d8f.apps.exact-mongrel-icp-mst.9.20.195.90.nip.io",
-    "type": "REMOTE",
-}
-
-RES
-202 : Added successfully
-    : BODY null
 ```
 
 ```json
-PUT /api/v1/links/:env
+PUT /api/v1/links/
 BODY {
-    "env": "JAVA_APP_URL",
-    "url": "appbaseURL or host+port (aka what we use to talk to performance)",
+    "envName": "OLD_ENV_NAME",
+    "updatedEnvName": "NEW_ENV_NAME"
 }
 
 RES
@@ -122,7 +90,7 @@ RES
 ```
 
 ```json
-DELETE /api/v1/links/:env
+DELETE /api/v1/links/
 BODY null
 
 RES
@@ -138,38 +106,26 @@ cwctl project link
 ```
 
 ```bash
-cwctl project link get
+cwctl project link list
     --id value,             -i value    the project id
-    --conid value                       the connection id
 ```
 
 ```bash
 cwctl project link create
     --id value,             -i value    the project id
-    --conid value                       the connection id
     --targetID value,       -t value    the project id of the project to add a link to
-    --targetConID value                 the connection id of the project to add a link to (If not given, targetConID is the same as conid)
     --env value             -e value    the name of the environment variable to use
 ```
 
 ```bash
 cwctl project link rename
     --id value,         -i value    the project id
-    --conid value                   the connection id
     --env value         -e value    the name of the environment variable to use
     --newEnv value                  the new name for the environment variable
 ```
 
 ```bash
-cwctl project link refresh
-    --id value,         -i value    the project id
-    --conid value                   the connection id
-    --env value         -e value    the name of the environment variable to refresh the url for
-```
-
-```bash
 cwctl project link delete
     --id value,         -i value    the project id
-    --conid value                   the connection id
     --env value         -e value    the name of the environment variable to delete
 ```
