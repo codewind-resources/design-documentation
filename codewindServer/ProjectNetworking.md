@@ -2,6 +2,12 @@
 
 # Linking Codewind Projects (Networking)
 
+## Intended user experience
+Access URL's pointing to Codewind projects using environment variables in their code:
+```javascript
+const databaseURL = process.env.DATABASE; // DATABASE points to a project under the covers
+```
+
 ## Design decisions/assumptions
 * Environment variables will be used to connect projects
 * ~~The URL of a project will never change (See issue #1) - for initial implementation~~ Use of link proxy voids this
